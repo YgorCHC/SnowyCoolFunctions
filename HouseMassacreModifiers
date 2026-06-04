@@ -1,0 +1,126 @@
+print("Modifier System :: Loaded Succes")
+
+local DataStoreService = game:GetService("DataStoreService")
+local Players = game:GetService("Players")
+
+local PartyStore = DataStoreService:GetDataStore("PartyOwner")
+local ModifierStore = DataStoreService:GetDataStore("Modifiers")
+local GameMultiplier = 1
+local ModificadoresGlobais = {
+	SpeedBoost = {
+		Name = "MAXIMUM OVERDRIVE",
+		Multiplier = -0.2,
+	},
+
+	DoubleCoins = {
+		Name = "DOUBLE COINS",
+		Multiplier = -0.5,
+	},
+
+	Hardcore = {
+		Name = "HARDCORE MODE",
+		Multiplier = 3,
+	},
+}
+
+if GameMultiplier <=0 then
+	GameMultiplier = 0.1
+end
+game.ReplicatedStorage.Multiplicador.Value = GameMultiplier
+
+local function CriarModificadores(player)
+	local pasta = player:FindFirstChild("modificadores")
+
+	if not pasta then
+		pasta = Instance.new("Folder")
+		pasta.Name = "modificadores"
+		pasta.Parent = player
+	end
+
+	for nome in pairs(ModificadoresGlobais) do
+		if not pasta:FindFirstChild(nome) then
+			local valor = Instance.new("NumberValue")
+			valor.Name = nome
+			valor.Parent = pasta
+		end
+	end
+
+	return pasta
+end
+
+local function CarregarJogador(player)
+	local userId = player.UserId
+
+	local sucesso, partyOwner = pcall(function()
+		return PartyStore:GetAsync(userId)
+	end)
+
+	if sucesso then
+		player:SetAttribute("PartyOwner", partyOwner == true)
+	else
+		player:SetAttribute("PartyOwner", false)
+	end
+
+	if not player:GetAttribute("PartyOwner") then
+		return
+	end
+
+	local pasta = CriarModificadores(player)
+
+	local sucessoMods, dados = pcall(function()
+		return ModifierStore:GetAsync(userId)
+	end)
+
+	if sucessoMods and typeof(dados) == "table" then
+		for nome, valor in pairs(dados) do
+			local modificador = pasta:FindFirstChild(nome)
+
+			if modificador then
+				modificador.Value = valor
+			end
+		end
+	end
+end
+
+local function SalvarJogador(player)
+	local userId = player.UserId
+
+	pcall(function()
+		PartyStore:SetAsync(
+			userId,
+			player:GetAttribute("PartyOwner") == true
+		)
+	end)
+
+	if not player:GetAttribute("PartyOwner") then
+		return
+	end
+
+	local pasta = player:FindFirstChild("modificadores")
+
+	if not pasta then
+		return
+	end
+
+	local dados = {}
+
+	for _, obj in ipairs(pasta:GetChildren()) do
+		if obj:IsA("NumberValue") then
+			dados[obj.Name] = obj.Value
+		end
+	end
+
+	pcall(function()
+		ModifierStore:SetAsync(userId, dados)
+	end)
+end
+
+Players.PlayerAdded:Connect(CarregarJogador)
+
+Players.PlayerRemoving:Connect(SalvarJogador)
+
+game:BindToClose(function()
+	for _, player in ipairs(Players:GetPlayers()) do
+		SalvarJogador(player)
+	end
+end)
