@@ -28,6 +28,40 @@ if GameMultiplier <=0 then
 end
 game.ReplicatedStorage.Multiplicador.Value = GameMultiplier
 
+local function CarregarJogador(player)
+	local userId = player.UserId
+
+	local sucesso, partyOwner = pcall(function()
+		return PartyStore:GetAsync(userId)
+	end)
+
+	if sucesso then
+		player:SetAttribute("PartyOwner", partyOwner == true)
+	else
+		player:SetAttribute("PartyOwner", false)
+	end
+
+	if not player:GetAttribute("PartyOwner") then
+		return
+	end
+
+	local pasta = CriarModificadores(player)
+
+	local sucessoMods, dados = pcall(function()
+		return ModifierStore:GetAsync(userId)
+	end)
+
+	if sucessoMods and typeof(dados) == "table" then
+		for nome, valor in pairs(dados) do
+			local modificador = pasta:FindFirstChild(nome)
+
+			if modificador then
+				modificador.Value = valor
+			end
+		end
+	end
+end
+
 local function AplicarModificadores(player)
 	local pasta = player:FindFirstChild("modificadores")
 
