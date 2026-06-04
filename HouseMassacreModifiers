@@ -9,24 +9,23 @@ local GameMultiplier = 1
 local ModificadoresGlobais = {
 	SpeedBoost = {
 		Name = "MAXIMUM OVERDRIVE",
-		Multiplier = -0.2,
+		Multiplier = -0.6,
+		Source = function(plr:Player)
+			print('Speed Boost')
+			game.ReplicatedStorage:SetAttribute('SpeedBoost', 2)
+		end,
 	},
 
-	DoubleCoins = {
-		Name = "DOUBLE COINS",
-		Multiplier = -0.5,
-	},
-
-	Hardcore = {
-		Name = "HARDCORE MODE",
-		Multiplier = 3,
+	['2.5x Faster'] = {
+		Name = "MADE IN HEAVEN",
+		Multiplier = 0.5,
+		Source = function(plr:Player)
+			print('mih')
+			game.ServerScriptService.Anoitecer.timemulti.Value = 2.5
+		end,
 	},
 }
 
-if GameMultiplier <=0 then
-	GameMultiplier = 0.1
-end
-game.ReplicatedStorage.Multiplicador.Value = GameMultiplier
 
 
 
@@ -36,7 +35,7 @@ local function AplicarModificadores(player)
 	if not pasta then
 		Instance.new('Folder', player).Name = 'modificadores'
 	end
-
+	pasta = player.modificadores
 	for nome, dados in pairs(ModificadoresGlobais) do
 		local valor = pasta:FindFirstChild(nome)
 
@@ -66,9 +65,9 @@ local function SalvarJogador(player)
 	local pasta = player:FindFirstChild("modificadores")
 
 	if not pasta then
-		return
+		Instance.new('Folder', player).Name = 'modificadores'
 	end
-
+	pasta = player.modificadores
 	local dados = {}
 
 	for _, obj in ipairs(pasta:GetChildren()) do
@@ -97,32 +96,40 @@ local function CarregarJogador(player)
 
 	if not player:GetAttribute("PartyOwner") then
 		return
+	else
+		task.delay(5,function()
+			player:SetAttribute("PartyOwner", false)
+		end)
 	end
-	print("Modifier System :: Owner Encontrado")
-
-	local pasta = AplicarModificadores(player)
-	
 	local sucessoMods, dados = pcall(function()
 		return ModifierStore:GetAsync(userId)
 	end)
-
+	local pasta = player:FindFirstChild("modificadores")
+	if not pasta then
+		Instance.new('Folder', player).Name = 'modificadores'
+	end
+	pasta = player.modificadores
+	print(dados)
 	if sucessoMods and typeof(dados) == "table" then
 		for nome, valor in pairs(dados) do
 			local modificador = pasta:FindFirstChild(nome)
-
-			if modificador then
+			if not modificador then
+				modificador = Instance.new("NumberValue")
+				modificador.Name = nome
+				modificador.Parent = pasta
 				modificador.Value = valor
 			end
 		end
 	end
+	
+	print("Modifier System :: Owner Encontrado")
+
+	AplicarModificadores(player)
+	
+	
+	
 end
 
 Players.PlayerAdded:Connect(CarregarJogador)
 
 Players.PlayerRemoving:Connect(SalvarJogador)
-
-game:BindToClose(function()
-	for _, player in ipairs(Players:GetPlayers()) do
-		SalvarJogador(player)
-	end
-end)
