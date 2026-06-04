@@ -28,45 +28,13 @@ if GameMultiplier <=0 then
 end
 game.ReplicatedStorage.Multiplicador.Value = GameMultiplier
 
-local function CarregarJogador(player)
-	local userId = player.UserId
 
-	local sucesso, partyOwner = pcall(function()
-		return PartyStore:GetAsync(userId)
-	end)
-
-	if sucesso then
-		player:SetAttribute("PartyOwner", partyOwner == true)
-	else
-		player:SetAttribute("PartyOwner", false)
-	end
-
-	if not player:GetAttribute("PartyOwner") then
-		return
-	end
-
-	local pasta = CriarModificadores(player)
-
-	local sucessoMods, dados = pcall(function()
-		return ModifierStore:GetAsync(userId)
-	end)
-
-	if sucessoMods and typeof(dados) == "table" then
-		for nome, valor in pairs(dados) do
-			local modificador = pasta:FindFirstChild(nome)
-
-			if modificador then
-				modificador.Value = valor
-			end
-		end
-	end
-end
 
 local function AplicarModificadores(player)
 	local pasta = player:FindFirstChild("modificadores")
 
 	if not pasta then
-		return
+		Instance.new('Folder', player).Name = 'modificadores'
 	end
 
 	for nome, dados in pairs(ModificadoresGlobais) do
@@ -78,6 +46,7 @@ local function AplicarModificadores(player)
 			end
 		end
 	end
+	return pasta
 end
 
 local function SalvarJogador(player)
@@ -111,6 +80,41 @@ local function SalvarJogador(player)
 	pcall(function()
 		ModifierStore:SetAsync(userId, dados)
 	end)
+end
+
+local function CarregarJogador(player)
+	local userId = player.UserId
+
+	local sucesso, partyOwner = pcall(function()
+		return PartyStore:GetAsync(userId)
+	end)
+
+	if sucesso then
+		player:SetAttribute("PartyOwner", partyOwner == true)
+	else
+		player:SetAttribute("PartyOwner", false)
+	end
+
+	if not player:GetAttribute("PartyOwner") then
+		return
+	end
+	print("Modifier System :: Owner Encontrado")
+
+	local pasta = AplicarModificadores(player)
+	
+	local sucessoMods, dados = pcall(function()
+		return ModifierStore:GetAsync(userId)
+	end)
+
+	if sucessoMods and typeof(dados) == "table" then
+		for nome, valor in pairs(dados) do
+			local modificador = pasta:FindFirstChild(nome)
+
+			if modificador then
+				modificador.Value = valor
+			end
+		end
+	end
 end
 
 Players.PlayerAdded:Connect(CarregarJogador)
