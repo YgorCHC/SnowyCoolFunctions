@@ -28,55 +28,19 @@ if GameMultiplier <=0 then
 end
 game.ReplicatedStorage.Multiplicador.Value = GameMultiplier
 
-local function CriarModificadores(player)
+local function AplicarModificadores(player)
 	local pasta = player:FindFirstChild("modificadores")
 
 	if not pasta then
-		pasta = Instance.new("Folder")
-		pasta.Name = "modificadores"
-		pasta.Parent = player
-	end
-
-	for nome in pairs(ModificadoresGlobais) do
-		if not pasta:FindFirstChild(nome) then
-			local valor = Instance.new("NumberValue")
-			valor.Name = nome
-			valor.Parent = pasta
-		end
-	end
-
-	return pasta
-end
-
-local function CarregarJogador(player)
-	local userId = player.UserId
-
-	local sucesso, partyOwner = pcall(function()
-		return PartyStore:GetAsync(userId)
-	end)
-
-	if sucesso then
-		player:SetAttribute("PartyOwner", partyOwner == true)
-	else
-		player:SetAttribute("PartyOwner", false)
-	end
-
-	if not player:GetAttribute("PartyOwner") then
 		return
 	end
 
-	local pasta = CriarModificadores(player)
+	for nome, dados in pairs(ModificadoresGlobais) do
+		local valor = pasta:FindFirstChild(nome)
 
-	local sucessoMods, dados = pcall(function()
-		return ModifierStore:GetAsync(userId)
-	end)
-
-	if sucessoMods and typeof(dados) == "table" then
-		for nome, valor in pairs(dados) do
-			local modificador = pasta:FindFirstChild(nome)
-
-			if modificador then
-				modificador.Value = valor
+		if valor and valor.Value > 0 then
+			if dados.Source then
+				dados.Source(player)
 			end
 		end
 	end
