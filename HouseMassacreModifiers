@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.9")
+print("Modifier System :: Loaded Succes :: V 0.1.0")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -18,8 +18,8 @@ local ModificadoresGlobais = {
 	},
 
 	['2.5x Faster'] = {
-		Name = "MADE IN HEAVEN",
-		Multiplier = 0.5,
+		Name = "Anxiety",
+		Multiplier = 0.2,
 		Source = function(plr:Player)
 			print('mih')
 			game.ServerScriptService.Anoitecer.timemulti.Value = 2.5
@@ -34,7 +34,7 @@ local ModificadoresGlobais = {
 	},
 	['High Jump'] = {
 		Name = "High Jump",
-		Multiplier = 0.2,
+		Multiplier = -0.5,
 		Source = function(plr:Player)
 			game.StarterPlayer.CharacterJumpHeight = 19.1
 		end,
@@ -48,14 +48,14 @@ local ModificadoresGlobais = {
 	},
 	['More Gun Piece'] = {
 		Name = "More Gun Piece",
-		Multiplier = 0.2,
+		Multiplier = 0.4,
 		Source = function(plr:Player)
 			Instance.new('BoolValue', workspace).Name = 'MoreGunPiece'
 		end,
 	},
 	['More Planks'] = {
 		Name = "More Planks",
-		Multiplier = -0.3,
+		Multiplier = -0.5,
 		Source = function(plr:Player)
 			for v=1,30 do
 				task.delay(5, function()
@@ -90,6 +90,29 @@ local ModificadoresGlobais = {
 			workspace.Camp.Proximity.Woods.Trigger.ProximityPrompt.MaxActivationDistance = 25
 		end,
 	},
+	['4x Faster'] = {
+		Name = "MADE IN HEAVEN",
+		Multiplier = 0.8,
+		Source = function(plr:Player)
+			print('mih')
+			game.ServerScriptService.Anoitecer.timemulti.Value = 4
+		end,
+	},
+	Slowness = {
+		Name = "I broke my legs :(",
+		Multiplier = 0.1,
+		Source = function(plr:Player)
+			print('Speed Boost')
+			game.ReplicatedStorage:SetAttribute('SpeedBoost', 0.75)
+		end,
+	},
+	['Double Trouble'] = {
+		Name = "Free model monster :P",
+		Multiplier = 0.4,
+		Source = function(plr:Player)
+			game.ServerStorage.bah.Name = 'RandomMonster'
+		end,
+	},
 }
 
 
@@ -120,6 +143,10 @@ local function AplicarModificadores(player)
 					Bad.Parent = script.Modifiers
 				end
 				print(dados.Name)
+				game.ReplicatedStorage.Multiplicador.Value -= dados.Multiplier
+				if game.ReplicatedStorage.Multiplicador.Value <0.1 then
+					game.ReplicatedStorage.Multiplicador.Value = 0.1
+				end
 			end
 			if dados.Source then
 				dados.Source(player)
