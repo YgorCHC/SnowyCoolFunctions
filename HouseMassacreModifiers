@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.9")
+print("Modifier System :: Loaded Succes :: V 0.6")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -37,6 +37,13 @@ local ModificadoresGlobais = {
 		Multiplier = -0.2,
 		Source = function(plr:Player)
 			Instance.new('BoolValue', workspace).Name = 'CanSee'
+		end,
+	},
+	['More Gun Piece'] = {
+		Name = "More Gun Piece",
+		Multiplier = 0.2,
+		Source = function(plr:Player)
+			Instance.new('BoolValue', workspace).Name = 'MoreGunPiece'
 		end,
 	},
 }
