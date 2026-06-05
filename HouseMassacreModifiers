@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.6")
+print("Modifier System :: Loaded Succes :: V 0.8")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -29,7 +29,14 @@ local ModificadoresGlobais = {
 		Name = "I can't Jump",
 		Multiplier = -0.2,
 		Source = function(plr:Player)
-			game.StarterPlayer.CharacterJumpHeight = 0
+			game.StarterPlayer.CharacterJumpHeight = .1
+		end,
+	},
+	['High Jump'] = {
+		Name = "High Jump",
+		Multiplier = 0.2,
+		Source = function(plr:Player)
+			game.StarterPlayer.CharacterJumpHeight = 16.1
 		end,
 	},
 	['Brightness'] = {
@@ -55,6 +62,32 @@ local ModificadoresGlobais = {
 					workspace.Camp.Proximity.Woods.Visual.Planks:GetChildren()[1]:Clone().Parent = workspace.Camp.Proximity.Woods.Visual.Planks
 				end)
 			end
+		end,
+	},
+	['More Box'] = {
+		Name = "More Box",
+		Multiplier = -0.2,
+		Source = function(plr:Player)
+			for v=1,7 do
+				task.delay(5, function()
+					workspace.Camp.Objects.Box1:Clone().Parent = workspace.Camp.Objects
+				end)
+			end
+		end,
+	},
+	['Less Gun Piece'] = {
+		Name = "Less Gun Piece",
+		Multiplier = -0.2,
+		Source = function(plr:Player)
+			Instance.new('BoolValue', workspace).Name = 'LessGunPiece'
+		end,
+	},
+	['Pick fast'] = {
+		Name = "Pick Faster",
+		Multiplier = -0.2,
+		Source = function(plr:Player)
+			workspace.Camp.Proximity.Woods.Trigger.ProximityPrompt.HoldDuration = 0.2
+			workspace.Camp.Proximity.Woods.Trigger.ProximityPrompt.MaxActivationDistance = 25
 		end,
 	},
 }
