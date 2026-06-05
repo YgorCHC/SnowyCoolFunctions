@@ -36,7 +36,7 @@ local ModificadoresGlobais = {
 		Name = "High Jump",
 		Multiplier = 0.2,
 		Source = function(plr:Player)
-			game.StarterPlayer.CharacterJumpHeight = 16.1
+			game.StarterPlayer.CharacterJumpHeight = 19.1
 		end,
 	},
 	['Brightness'] = {
