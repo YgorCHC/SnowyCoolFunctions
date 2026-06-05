@@ -110,9 +110,22 @@ local ModificadoresGlobais = {
 		Name = "Free model monster :P",
 		Multiplier = 0.4,
 		Source = function(plr:Player)
-			game.ServerStorage.bah.Name = 'RandomMonster'
+			if game.ServerStorage:FindFirstChild('bah') then
+				game.ServerStorage.bah.Name = 'RandomMonster'
+			end
 		end,
 	},
+	['Monster Broke Wall'] = {
+		Name = "The Stronghest Monster",
+		Multiplier = 0.8,
+		Source = function(plr:Player)
+			pcall(function()
+				local TSM = script.TSM:Clone()
+				TSM.Parent = game.ServerScriptService.Anoitecer.Fella
+				TSM.Enabled = true	
+			end)
+		end,
+	}
 }
 
 
@@ -143,7 +156,7 @@ local function AplicarModificadores(player)
 					Bad.Parent = script.Modifiers
 				end
 				print(dados.Name)
-				game.ReplicatedStorage.Multiplicador.Value -= dados.Multiplier
+				game.ReplicatedStorage.Multiplicador.Value += dados.Multiplier
 				if game.ReplicatedStorage.Multiplicador.Value <0.1 then
 					game.ReplicatedStorage.Multiplicador.Value = 0.1
 				end
