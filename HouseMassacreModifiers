@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.1")
+print("Modifier System :: Loaded Succes :: V 0.5.5")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -13,16 +13,30 @@ local ModificadoresGlobais = {
 		Multiplier = -0.6,
 		Source = function(plr:Player)
 			print('Speed Boost')
-			game.ReplicatedStorage:SetAttribute('SpeedBoost', 2)
+			game.ReplicatedStorage:SetAttribute('SpeedBoost', 1.4)
 		end,
 	},
 
-	['2.5x Faster'] = {
+	['1.5x Faster'] = {
 		Name = "MADE IN HEAVEN",
 		Multiplier = 0.5,
 		Source = function(plr:Player)
 			print('mih')
 			game.ServerScriptService.Anoitecer.timemulti.Value = 2.5
+		end,
+	},
+	['Remove Jump'] = {
+		Name = "I can't Jump",
+		Multiplier = -0.2,
+		Source = function(plr:Player)
+			game.StarterPlayer.CharacterJumpHeight = 0
+		end,
+	},
+	['Brightness'] = {
+		Name = "I can see!!!",
+		Multiplier = -0.2,
+		Source = function(plr:Player)
+			Instance.new('BoolValue', workspace).Name = 'CanSee'
 		end,
 	},
 }
