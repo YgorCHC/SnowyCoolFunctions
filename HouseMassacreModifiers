@@ -61,24 +61,26 @@ local function AplicarModificadores(player)
 	for nome, dados in pairs(ModificadoresGlobais) do
 		local valor = pasta:FindFirstChild(nome)
 
-		if script:FindFirstChild('Modifiers') then
-			if dados.Multiplier <0 then
-				local Good = script.Modifiers.Good:Clone()
-				Good.Text = dados.Name
-				Good.Visible = true
-				Good.Parent = script.Modifiers
-			else
-				local Bad = script.Modifiers.Bad:Clone()
-				Bad.Text = dados.Name
-				Bad.Visible =true
-				Bad.Parent = script.Modifiers
+		if valor then
+			if script:FindFirstChild('Modifiers') then
+				if dados.Multiplier <0 then
+					local Good = script.Modifiers.Good:Clone()
+					Good.Text = dados.Name
+					Good.Visible = true
+					Good.Parent = script.Modifiers
+				else
+					local Bad = script.Modifiers.Bad:Clone()
+					Bad.Text = dados.Name
+					Bad.Visible =true
+					Bad.Parent = script.Modifiers
+				end
+				print(dados.Name)
 			end
-			print(dados.Name)
-		end
 
-		if valor and valor.Value > 0 then
-			if dados.Source then
-				dados.Source(player)
+			if valor and valor.Value > 0 then
+				if dados.Source then
+					dados.Source(player)
+				end
 			end
 		end
 	end
