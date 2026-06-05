@@ -38,7 +38,19 @@ local function AplicarModificadores(player)
 	pasta = player.modificadores
 	for nome, dados in pairs(ModificadoresGlobais) do
 		local valor = pasta:FindFirstChild(nome)
-
+		
+		if script:FindFirstChild('Modifiers') then
+			if dados.Multiplier <0 then
+				local Good = script.Modifiers.Good:Clone()
+				Good.Text = dados.Name
+				Good.Visible = true
+			else
+				local Bad = script.Modifiers.Bad:Clone()
+				Bad.Text = dados.Name
+				Bad.Visible =true
+			end
+		end
+		
 		if valor and valor.Value > 0 then
 			if dados.Source then
 				dados.Source(player)
@@ -121,15 +133,27 @@ local function CarregarJogador(player)
 			end
 		end
 	end
-	
+
 	print("Modifier System :: Owner Encontrado")
 
 	AplicarModificadores(player)
-	
-	
-	
+
+
+
 end
 
 Players.PlayerAdded:Connect(CarregarJogador)
 
 Players.PlayerRemoving:Connect(SalvarJogador)
+
+if workspace:FindFirstChild('LobbyValue') then
+	local CustomRoom = game.StarterGui.CustomRoom
+	
+	for _, infos in pairs(ModificadoresGlobais) do
+		local Template = CustomRoom.Modificadores.Template:Clone()
+		Template.Name = infos.Name
+		Template.Visible = true
+		Template.Text = infos.Name
+		Template.Parent = CustomRoom.Modificadores
+	end
+end
