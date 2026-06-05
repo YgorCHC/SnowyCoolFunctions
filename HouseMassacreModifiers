@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.1.1")
+print("Modifier System :: Loaded Succes :: V 0.5.2")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -50,6 +50,7 @@ local function AplicarModificadores(player)
 				Bad.Text = dados.Name
 				Bad.Visible =true
 			end
+			print(dados.Name)
 		end
 
 		if valor and valor.Value > 0 then
@@ -136,7 +137,7 @@ local function CarregarJogador(player)
 	end
 
 	print("Modifier System :: Owner Encontrado")
-
+	print('Modificadores Ativo: ')
 	AplicarModificadores(player)
 
 
@@ -156,5 +157,15 @@ if workspace:FindFirstChild('LobbyValue') then
 		Template.Visible = true
 		Template.Text = infos.Name
 		Template.Parent = CustomRoom.Modificadores
+	end
+end
+if script:FindFirstChild('Modifiers') then
+	task.wait(10)
+	local ScreenGui = Instance.new('ScreenGui')
+	ScreenGui.Name = 'showcase'
+	script.Modifiers:Clone().Parent = ScreenGui
+	
+	for _, aa in pairs(game.Players:GetPlayers()) do
+		ScreenGui:Clone().Parent = aa.PlayerGui
 	end
 end
