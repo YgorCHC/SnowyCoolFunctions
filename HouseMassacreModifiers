@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.5")
+print("Modifier System :: Loaded Succes :: V 0.5.8")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -13,11 +13,11 @@ local ModificadoresGlobais = {
 		Multiplier = -0.6,
 		Source = function(plr:Player)
 			print('Speed Boost')
-			game.ReplicatedStorage:SetAttribute('SpeedBoost', 1.4)
+			game.ReplicatedStorage:SetAttribute('SpeedBoost', 1.3)
 		end,
 	},
 
-	['1.5x Faster'] = {
+	['2.5x Faster'] = {
 		Name = "MADE IN HEAVEN",
 		Multiplier = 0.5,
 		Source = function(plr:Player)
@@ -155,13 +155,16 @@ local function CarregarJogador(player)
 	AplicarModificadores(player)
 	if script:FindFirstChild('Modifiers') then
 		task.wait(7)
+		print('aa')
 		local ScreenGui = Instance.new('ScreenGui')
 		ScreenGui.Name = 'showcase'
 		script.Modifiers.Visible = true
 		script.Modifiers:Clone().Parent = ScreenGui
 
 		for _, aa in pairs(game.Players:GetPlayers()) do
-			ScreenGui:Clone().Parent = aa.PlayerGui
+			local bah = ScreenGui:Clone()
+			bah.Parent = aa.PlayerGui
+			bah.Enabled = true
 		end
 	end
 
