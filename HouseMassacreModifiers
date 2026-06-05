@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.2")
+print("Modifier System :: Loaded Succes :: V 0.5.1")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -151,9 +151,9 @@ Players.PlayerRemoving:Connect(SalvarJogador)
 if workspace:FindFirstChild('LobbyValue') then
 	local CustomRoom = game.StarterGui.CustomRoom
 
-	for _, infos in pairs(ModificadoresGlobais) do
+	for _1, infos in pairs(ModificadoresGlobais) do
 		local Template = CustomRoom.Modificadores.Template:Clone()
-		Template.Name = infos.Name
+		Template.Name = tostring(_1)
 		Template.Visible = true
 		Template.Text = infos.Name
 		Template.Parent = CustomRoom.Modificadores
