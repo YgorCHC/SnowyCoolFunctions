@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.1.0")
+print("Modifier System :: Loaded Succes :: V 0.1.2")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -149,7 +149,9 @@ local function AplicarModificadores(player)
 				end
 			end
 			if dados.Source then
-				dados.Source(player)
+				pcall(function()
+					dados.Source(player)
+				end)
 			end
 		end
 	end
