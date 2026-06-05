@@ -27,7 +27,7 @@ local ModificadoresGlobais = {
 	},
 	['Remove Jump'] = {
 		Name = "I can't Jump",
-		Multiplier = -0.2,
+		Multiplier = 0.2,
 		Source = function(plr:Player)
 			game.StarterPlayer.CharacterJumpHeight = 0
 		end,
