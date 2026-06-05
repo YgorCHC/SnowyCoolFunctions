@@ -1,4 +1,4 @@
-print("Modifier System :: Loaded Succes :: V 0.5.8")
+print("Modifier System :: Loaded Succes :: V 0.5.9")
 
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -59,10 +59,12 @@ local function AplicarModificadores(player)
 				local Good = script.Modifiers.Good:Clone()
 				Good.Text = dados.Name
 				Good.Visible = true
+				Good.Parent = script.Modifiers
 			else
 				local Bad = script.Modifiers.Bad:Clone()
 				Bad.Text = dados.Name
 				Bad.Visible =true
+				Bad.Parent = script.Modifiers
 			end
 			print(dados.Name)
 		end
@@ -165,6 +167,7 @@ local function CarregarJogador(player)
 			local bah = ScreenGui:Clone()
 			bah.Parent = aa.PlayerGui
 			bah.Enabled = true
+			game.Debris:AddItem(bah, 15)
 		end
 	end
 
